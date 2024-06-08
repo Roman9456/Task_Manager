@@ -17,6 +17,23 @@ const pinnedTasksList = document.getElementById('pinnedTasks');
 const allTasksList = document.getElementById('allTasks');
 const taskInput = document.getElementById('taskInput');
 
+document.addEventListener('click', function(event) {
+    const target = event.target;
+    if (target.matches('.clickable')) {
+        const taskName = target.textContent;
+        const task = tasks.find(task => task.name === taskName);
+        if (task) {
+            toggleTask(task);
+        }
+    } else if (target.matches('.toggleButton')) {
+        const taskName = target.parentElement.textContent;
+        const task = tasks.find(task => task.name === taskName);
+        if (task) {
+            toggleTask(task);
+        }
+    }
+});
+
 function renderTasks() {
     pinnedTasksList.innerHTML = '';
     allTasksList.innerHTML = '';
@@ -29,12 +46,11 @@ function renderTasks() {
 
         if (!task.pinned) {
             li.classList.add('clickable');
-            li.onclick = () => toggleTask(task);
         }
 
         const toggleButton = document.createElement('button');
         toggleButton.textContent = task.pinned ? 'Unpin' : 'Pin';
-        toggleButton.onclick = () => toggleTask(task);
+        toggleButton.classList.add('toggleButton');
         li.appendChild(toggleButton);
 
         if (task.pinned) {
