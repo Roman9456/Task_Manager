@@ -1,0 +1,55 @@
+image: Ubuntu1804
+
+branches:
+  only:
+    - main
+
+environment:
+  matrix:
+    - nodejs_version: "14"
+
+init:
+  - echo "Installing NVM..."
+  - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+  - export NVM_DIR="$HOME/.nvm"
+  - source "$NVM_DIR/nvm.sh"
+  - echo "Installing Node.js..."
+  - nvm install $nodejs_version
+  - nvm use $nodejs_version
+
+install:
+  - echo "Installing dependencies..."
+  - yarn install
+
+build_script:
+  - echo "Building the project..."
+  - yarn run build
+
+artifacts:
+  - path: dist
+    name: artifact
+
+deploy_script:
+  - echo "Configuring Git..."
+  - git config --global credential.helper store
+  - git config --global user.name "Roman9456"
+  - git config --global user.email "smolyakov_ra@mail.ru"
+  - echo "https://${GITHUB_TOKEN}:x-oauth-basic@github.com" > "$HOME/.git-credentials"
+  - echo "Contents of dist directory:"
+  - ls -al dist
+  - echo "Checking for changes in the build..."
+  - if git diff --quiet --exit-code; then echo "No changes detected in the build. Skipping deployment."; exit 0; fi
+  - echo "Deploying to GitHub Pages..."
+  - git clone --branch gh-pages https://github.com/Roman9456/Whack-a-Goblin.git gh-pages
+  - rm -rf gh-pages/*
+  - cp -r dist/* gh-pages/
+  - echo "Contents of gh-pages directory:"
+  - ls -al gh-pages
+  - echo "Untracked files in working directory:"
+  - git status --porcelain
+  - cd gh-pages
+  - if git diff --quiet --exit-code; then echo "No changes detected in gh-pages directory. Skipping deployment."; exit 0; fi
+  - git add .
+  - git commit -m "Deploy to GitHub Pages"
+  - git push origin gh-pages
+  - echo "Deployment complete."

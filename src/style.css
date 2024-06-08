@@ -1,0 +1,99 @@
+#game-container {
+  display: grid;
+  grid-template-columns: repeat(4, 100px);
+  grid-template-rows: repeat(4, 100px);
+  gap: 5px;
+}
+
+.cell {
+  width: 100px;
+  height: 100px;
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.goblin {
+  width: 80px;
+  height: 80px;
+}
+
+#score, #missed {
+  margin-top: 20px;
+}
+body {
+  font-family: 'Courier New', Courier, monospace;
+  margin: 0;
+  padding: 0;
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2 {
+  margin: 0 0 10px;
+  color: #333;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.pinned-tasks ul,
+.all-tasks ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.all-tasks input[type="text"] {
+  width: calc(100% - 10px);
+  margin-bottom: 10px;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  color: #333;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.all-tasks li,
+.pinned-tasks li {
+  margin-bottom: 5px;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #eee;
+  color: #333;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.all-tasks li:hover,
+.pinned-tasks li:hover {
+  background-color: #ddd;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.all-tasks button,
+.pinned-tasks button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin-left: 5px;
+  padding: 5px 10px;
+  border-radius: 3px;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.all-tasks button:hover,
+.pinned-tasks button:hover {
+  background-color: #45a049;
+}
