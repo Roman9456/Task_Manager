@@ -34,7 +34,6 @@ artifacts:
     name: artifact
 
 deploy_script:
-  # Копирование собранного проекта в ветку gh-pages и его публикация
   - echo "Configuring Git..."
   - git config --global credential.helper store
   - git config --global user.name "Roman9456"
@@ -43,14 +42,12 @@ deploy_script:
   - echo "Contents of dist directory:"
   - ls -al dist
   - echo "Checking for changes in the build..."
-  - if git diff --quiet --exit-code; then echo "No changes detected in the build. Skipping deployment."; exit 0; fi
-  - echo "Deploying to GitHub Pages..."
-  # Клонирование репозитория во временную папку
-  - git clone --branch gh-pages https://github.com/Roman9456/Task_Manager.git gh-pages-temp
-  # Очистка содержимого временной папки gh-pages
+  # Проверка наличия ветки gh-pages
+  - if ! git ls-remote origin gh-pages | grep gh-pages > /dev/null; then git checkout -b gh-pages; fi
+  # Очистка содержимого временной папки gh-pages-temp
   - rm -rf gh-pages-temp/*
-  # Копирование содержимого папки dist во временную папку gh-pages
-  - cp -r dist/* gh-pages-temp/
+  # Копирование содержимого папки dist во временную папку gh-pages-temp
+  - cp -r dist/. gh-pages-temp/
   - cd gh-pages-temp
   # Добавление всех файлов в гит
   - git add .
