@@ -9,6 +9,7 @@ environment:
     - nodejs_version: "14"
 
 init:
+  # Установка NVM и Node.js
   - echo "Installing NVM..."
   - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
   - export NVM_DIR="$HOME/.nvm"
@@ -18,18 +19,22 @@ init:
   - nvm use $nodejs_version
 
 install:
+  # Установка зависимостей с помощью Yarn
   - echo "Installing dependencies..."
   - yarn install
 
 build_script:
+  # Сборка проекта
   - echo "Building the project..."
   - yarn run build
 
 artifacts:
+  # Определение артефактов для сохранения собранного проекта
   - path: dist
     name: artifact
 
 deploy_script:
+  # Копирование собранного проекта в ветку gh-pages и его публикация
   - echo "Configuring Git..."
   - git config --global credential.helper store
   - git config --global user.name "Roman9456"
@@ -40,16 +45,17 @@ deploy_script:
   - echo "Checking for changes in the build..."
   - if git diff --quiet --exit-code; then echo "No changes detected in the build. Skipping deployment."; exit 0; fi
   - echo "Deploying to GitHub Pages..."
-  - git clone --branch gh-pages https://github.com/Roman9456/Task_Manager.git gh-pages
-  - rm -rf gh-pages/*
-  - cp -r dist/* gh-pages/
-  - echo "Contents of gh-pages directory after copying:"
-  - ls -al gh-pages
-  - echo "Untracked files in working directory:"
-  - git status --porcelain
-  - if git diff --quiet --exit-code; then echo "No changes detected in gh-pages directory. Skipping deployment."; exit 0; fi
-  - cd gh-pages
+  # Клонирование репозитория во временную папку
+  - git clone --branch gh-pages https://github.com/Roman9456/Task_Manager.git gh-pages-temp
+  # Очистка содержимого временной папки gh-pages
+  - rm -rf gh-pages-temp/*
+  # Копирование содержимого папки dist во временную папку gh-pages
+  - cp -r dist/* gh-pages-temp/
+  - cd gh-pages-temp
+  # Добавление всех файлов в гит
   - git add .
+  # Коммит изменений
   - git commit -m "Deploy to GitHub Pages"
-  - git push origin gh-pages
+  # Пуш временной папки на ветку gh-pages
+  - git push origin gh-pages-temp:gh-pages
   - echo "Deployment complete."
