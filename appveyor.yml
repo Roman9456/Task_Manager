@@ -41,13 +41,15 @@ deploy_script:
   - if git diff --quiet --exit-code; then echo "No changes detected in the build. Skipping deployment."; exit 0; fi
   - echo "Deploying to GitHub Pages..."
   - git clone --branch gh-pages https://github.com/Roman9456/Task_Manager.git gh-pages
-  - rm -rf gh-pages/*
-  - cp -r dist/* .
-  - echo "Contents of root directory:"
+  - cp -r dist/* gh-pages/
+  - cd gh-pages
+  - rm -rf *
+  - mv ../dist/* ./
+  - echo "Contents of gh-pages directory after copying:"
   - ls -al
   - echo "Untracked files in working directory:"
   - git status --porcelain
-  - if git diff --quiet --exit-code; then echo "No changes detected in root directory. Skipping deployment."; exit 0; fi
+  - if git diff --quiet --exit-code; then echo "No changes detected in gh-pages directory. Skipping deployment."; exit 0; fi
   - git add .
   - git commit -m "Deploy to GitHub Pages"
   - git push origin gh-pages
